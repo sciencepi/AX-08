@@ -5,4 +5,4 @@
 class FileLoader{
 public:
     std::string loadFile(std::string* fileName);
-}
+};
