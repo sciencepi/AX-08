@@ -1,0 +1,33 @@
+== TEM-8 ==
+
+The TEM-8 is a general purpose, turing complete computer that utilizes a C
+framework to emulate itself. It is intended for limited use as a programming
+device used to teach how computers work.
+
+== MEMORY ==
+
+-> 0x0000 - 0x7fff : This is General Purpose ROM, used by the current program.
+-> 0x8000 - 0xbfff : This is General Purpose RAM, used by the programmer/user.
+-> 0xc000 - 0xc100 : This is the Stack.
+-> 0xc101 - 0xfffb : More General Purpose RAM
+-> 0xfffc - 0xfffd : SP/(S)TACK (P)OINTER.
+-> 0xfffe - 0xffff : PC/(P)ROGRAM (C)OUNTER.
+
+== INSTRUCTIONS ==
+
+00 : ADD REG, IMM16/REG -> REG = REG + IMM16/REG
+01 : ADC REG, IMM16/REG -> REG = REG + IMM16/REG + C
+02 : AND REG, IMM16/REG -> REG = REG & IMM16/REG
+03 : OR  REG, IMM16/REG -> REG = REG | IMM16/REG
+04 : NOR REG, IMM16/REG -> REG = ~(REG | IMM16/REG)
+05 : CMP REG, IMM16/REG -> REG = REG - IMM16/REG
+06 : PUSH IMM16/REG     -> [++SP]
+07 : POP IMM16/REG      -> [--SP]
+08 : LR  REG, IMM16/REG -> REG = IMM16/REG
+09 : SR  REG, IMM16/HL  -> [*HL/IMM16] = REG
+0A : MR  REG, REG       -> REG = REG
+0B : LHL H/L, IMM16     -> H/L = [IMM16]
+0C : JNZ IMM16/REG      -> IMM16/REG != 0 ? PC = HL : NOP
+0D : NOP                -> [++PC]
+0E : HALT               -> [PC = PC]**
+0F : SUB REG, IMM16/REG -> REG = REG - IMM16/REG
