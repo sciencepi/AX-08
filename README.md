@@ -8,4 +8,5 @@ or architecture.
 
 ## How to use:
 To compile run `ax08comp <file>` [NOT IMPLEMENTED]
+
 To emulate run `ax08emu <rom>` [NOT IMPLEMENTED]
