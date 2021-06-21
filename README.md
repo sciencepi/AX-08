@@ -7,6 +7,6 @@ or architecture.
 ### Warning: Currently In DEVELOPMENT, project not complete.
 
 ## How to use:
-To compile run `ax08comp <file>` [NOT IMPLEMENTED]
+To compile run `ax08comp <file>` [IN DEVELOPMENT]
 
 To emulate run `ax08emu <rom>` [NOT IMPLEMENTED]
