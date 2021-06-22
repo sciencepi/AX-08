@@ -64,7 +64,10 @@ std::vector<std::string> Lexer::analyse(){
 
     while (idx < Lexer::current_text.length()){
         if (Lexer::current_text[idx] != '\n' && Lexer::current_text[idx] != ' ') tok += Lexer::current_text[idx];
-        if (Lexer::current_text[idx] == '\n') line++;
+        if (Lexer::current_text[idx] == '\n'){
+            line++;
+            ADD_TOKEN(tokens, tok, "NEWLINE");
+        }
 
         // instructions
         if (tok == "LDL") ADD_TOKEN(tokens, tok, "LOAD_ACCUMULATOR_LOW");
@@ -93,11 +96,11 @@ std::vector<std::string> Lexer::analyse(){
         // registers
         if (tok == "%AH") ADD_TOKEN(tokens, tok, "REGISTER_ACCHI");
         if (tok == "%AL") ADD_TOKEN(tokens, tok, "REGISTER_ACCLOW");
-        if (tok == "%RBX") ADD_TOKEN(tokens, tok, "REGISTER_B");
-        if (tok == "%RAX") ADD_TOKEN(tokens, tok, "REGISTER_A");
-        if (tok == "%RCX") ADD_TOKEN(tokens, tok, "REGISTER_C");
-        if (tok == "%RDX") ADD_TOKEN(tokens, tok, "REGISTER_D");
-        if (tok == "%RZX") ADD_TOKEN(tokens, tok, "REGISTER_Z");
+        if (tok == "%RBX") ADD_TOKEN(tokens, tok, "REGISTER_1");
+        if (tok == "%RAX") ADD_TOKEN(tokens, tok, "REGISTER_0");
+        if (tok == "%RCX") ADD_TOKEN(tokens, tok, "REGISTER_2");
+        if (tok == "%RDX") ADD_TOKEN(tokens, tok, "REGISTER_3");
+        if (tok == "%RZX") ADD_TOKEN(tokens, tok, "REGISTER_4");
 
         // number CTRL
         if (tok[tok.length()-1] == 'H') ADD_TOKEN(tokens, tok, "INT:"+convertHexToInt(tok));

@@ -17,6 +17,17 @@ int main(int argc, char** argv){
         std::vector<std::string> tokens = lexer.analyse();
 
         std::vector<int> bytes = parser.parseToBytes(tokens, lexer);
+        if (bytes.size() == 2){
+            int numz = 0;
+            for (int i = 0; i < bytes.size(); i++){
+                if (bytes[i] == 0x00){
+                    ++numz;
+                }
+            }
+            if (numz == bytes.size()){
+                return -1;
+            }
+        }
 
         for (int i = 0; i < bytes.size(); i++){
             std::cout << "0x" << std::hex << bytes[i] << "  ";
