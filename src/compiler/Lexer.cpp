@@ -6,6 +6,8 @@
 #include <sstream>
 #include <algorithm>
 
+#include <stdlib.h>
+
 /*
     - Lexer specific functions
     - IE functions that don't belong in the lexer class but are still required for the Lexer to
@@ -40,8 +42,13 @@ std::string Lexer::slice(int start, int stop, std::string str){
     return ret;
 }
 
+void LEXER_ERROR(std::string err, int l){
+    std::cout << "Error [LINE:" << l << "]: " << err << std::endl;
+    exit(-1);
+}
+
 std::string Lexer::convertHexToInt(std::string str){
-    unsigned int x;
+    unsigned int x; 
     std::stringstream ss;
     ss << std::hex << slice(0, str.length()-1, str);
     ss >> x;
@@ -103,7 +110,16 @@ std::vector<std::string> Lexer::analyse(){
         if (tok == "%RZX") ADD_TOKEN(tokens, tok, "REGISTER_4");
 
         // number CTRL
-        if (tok[tok.length()-1] == 'H') ADD_TOKEN(tokens, tok, "INT:"+convertHexToInt(tok));
+        if (tok[tok.length()-1] == 'H'){ // 2-way: 16-bit numbers and 8-bit numbers
+            if (tok.length() == 5){ // 16-bits
+                ADD_TOKEN(tokens, tok, "IMM16:"+convertHexToInt(tok));
+            }
+            else if (tok.length() == 3){
+                ADD_TOKEN(tokens, tok, "IMM8:"+convertHexToInt(tok));
+            }else{
+                LEXER_ERROR("Illegal number type - non 16/8 bit number detected.", line);
+            }
+        }
         ++idx;
     }
 

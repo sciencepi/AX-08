@@ -15,10 +15,11 @@ std::vector<int> ERROR_VECTOR_GENERATOR(){
 std::vector<int> Parser::parseToBytes(std::vector<std::string> tokens, Lexer lex){
     std::vector<int> output;
     int current_line = 0;
-
-    for (int i = 0; i < tokens.size(); i++){
+    int i = 0;
+    while (i+1 <= tokens.size()){
         if (tokens[i] == "NEWLINE"){
             current_line++;
+            i+=1;
             continue; //  continue is here to increase efficiency as we don't need to check the other statements.
         }
         if (tokens[i] == "LOAD_ACCUMULATOR_HIGH"){
@@ -26,15 +27,33 @@ std::vector<int> Parser::parseToBytes(std::vector<std::string> tokens, Lexer lex
             try{
                 if (tokens.size()-2 == i) throw 0;
                 // parsing code.
-                if (lex.slice(0, 4, tokens[i+1]) == "INT:") {
+                if (lex.slice(0, 5, tokens[i+1]) == "IMM8:") {
                     output.push_back(I_LDL);
-                    output.push_back(stoi(lex.slice(4, tokens[i+1].length(), tokens[i+1])));
-                    continue;
+                    output.push_back(stoi(lex.slice(5, tokens[i+1].length(), tokens[i+1])));
+                    i+=2;
                 }
-                if (lex.slice(0, 3, tokens[i+1]) == "REG"){
+                else if (lex.slice(0, 3, tokens[i+1]) == "REG"){
                     output.push_back(I_LDL+0x10);
-                    output.push_back((stoi(lex.slice(tokens[i+1].length()-1, tokens[i+1].length(), tokens[i+1])) << 8));
-                    continue;
+                    output.push_back((stoi(lex.slice(tokens[i+1].length()-1, tokens[i+1].length(), tokens[i+1]))));
+                    i+= 2;
+                }
+                else if (tokens[i+1] == "RIGHTBRACKET" && lex.slice(0, 5, tokens[i+2]) == "IMM8:" && tokens[i+3] == "COMMA" &&\
+                 lex.slice(0, 3, tokens[i+4]) == "REG" && tokens[i+5] == "LEFTBRACKET"){
+
+                    output.push_back(I_LDL+0x20);
+                    output.push_back(stoi(lex.slice(5, tokens[i+1].length(), tokens[i+2])));
+                    output.push_back((stoi(lex.slice(tokens[i+4].length()-1, tokens[i+4].length(), tokens[i+4]))));
+                    i += 2;
+                }
+                else if (lex.slice(0, 6, tokens[i+1]) == "IMM16:"){
+                    int integer_value = stoi(lex.slice(6, tokens[i+1].length(), tokens[i+1]));
+                    int upper_8       = (integer_value & 0xff00) >> 8;
+                    int lower_8       = (integer_value & 0x00ff);
+                    output.push_back(I_LDL+0x30);
+                    output.push_back(lower_8);
+                    output.push_back(upper_8);
+
+                    i += 2;
                 }
             }catch(int e){
                 std::cout << "Error on line " << current_line << ".\n";
@@ -44,8 +63,9 @@ std::vector<int> Parser::parseToBytes(std::vector<std::string> tokens, Lexer lex
         }
         if (tokens[i] == "LOAD_ACCUMULATOR_LOW"){
             output.push_back(I_LDL);
-            output.push_back(stoi(lex.slice(4, tokens[i+1].length(), tokens[i+1])));
+            output.push_back(stoi(lex.slice(5, tokens[i+1].length(), tokens[i+1])));
         }
+        i++;
     }
     return output;
 } 
