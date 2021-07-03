@@ -109,6 +109,9 @@ std::vector<std::string> Lexer::analyse(){
         if (tok == "%RDX") ADD_TOKEN(tokens, tok, "REGISTER_3");
         if (tok == "%RZX") ADD_TOKEN(tokens, tok, "REGISTER_4");
 
+        // preprocessor macros
+        if (tok == "@ORG") ADD_TOKEN(tokens, tok, "PREP_ORG");
+
         // number CTRL
         if (tok[tok.length()-1] == 'H'){ // 2-way: 16-bit numbers and 8-bit numbers
             if (tok.length() == 5){ // 16-bits

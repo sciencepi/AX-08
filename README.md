@@ -7,6 +7,11 @@ or architecture.
 ### Warning: Currently In DEVELOPMENT, project not complete.
 
 ## How to use:
-To compile run `ax08comp <file>` [IN DEVELOPMENT]
+To compile run `ax08comp <file> <rom_output>` [IN DEVELOPMENT]
 
 To emulate run `ax08emu <rom>` [NOT IMPLEMENTED]
+
+## Added:
+- Added `@org` preprocessor directive
+- Added the ability to output rom files
+- Revamp'd the parser system - now successfully ouputs the correct binary

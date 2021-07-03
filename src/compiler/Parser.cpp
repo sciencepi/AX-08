@@ -19,7 +19,7 @@ std::vector<int> Parser::parseToBytes(std::vector<std::string> tokens, Lexer lex
     while (i+1 <= tokens.size()){
         if (tokens[i] == "NEWLINE"){
             current_line++;
-            i+=1;
+            i += 1;
             continue; //  continue is here to increase efficiency as we don't need to check the other statements.
         }
         if (tokens[i] == "LOAD_ACCUMULATOR_HIGH"){
@@ -50,10 +50,14 @@ std::vector<int> Parser::parseToBytes(std::vector<std::string> tokens, Lexer lex
                     int upper_8       = (integer_value & 0xff00) >> 8;
                     int lower_8       = (integer_value & 0x00ff);
                     output.push_back(I_LDL+0x30);
+
+                    // the system is little endian
                     output.push_back(lower_8);
                     output.push_back(upper_8);
 
                     i += 2;
+                }else{
+                    std::cout << "Error - unexpected token on line: " << current_line << "\n";
                 }
             }catch(int e){
                 std::cout << "Error on line " << current_line << ".\n";
@@ -64,6 +68,13 @@ std::vector<int> Parser::parseToBytes(std::vector<std::string> tokens, Lexer lex
         if (tokens[i] == "LOAD_ACCUMULATOR_LOW"){
             output.push_back(I_LDL);
             output.push_back(stoi(lex.slice(5, tokens[i+1].length(), tokens[i+1])));
+        }
+
+        // preprocessor macros
+
+        if (tokens[i] == "PREP_ORG" && lex.slice(0, 6, tokens[i+1]) == "IMM16:"){
+            Parser::org_address = stoi(lex.slice(6, tokens[i+1].length(), tokens[i+1]));
+            i += 2;
         }
         i++;
     }
