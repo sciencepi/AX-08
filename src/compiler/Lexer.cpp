@@ -80,7 +80,6 @@ std::vector<std::string> Lexer::analyse(){
         if (tok == "LDL") ADD_TOKEN(tokens, tok, "LOAD_ACCUMULATOR_LOW");
         if (tok == "LDH") ADD_TOKEN(tokens, tok, "LOAD_ACCUMULATOR_HIGH");
         if (tok == "ADD") ADD_TOKEN(tokens, tok, "ADD");
-        if (tok == "ADC") ADD_TOKEN(tokens, tok, "ADD_WITH_CARRY");
         if (tok == "AND") ADD_TOKEN(tokens, tok, "AND");
         if (tok == "OR") ADD_TOKEN(tokens, tok, "OR");
         if (tok == "NOR") ADD_TOKEN(tokens, tok, "NOR");
@@ -92,7 +91,7 @@ std::vector<std::string> Lexer::analyse(){
         if (tok == "MR") ADD_TOKEN(tokens, tok, "MOVEREG");
         if (tok == "JNZ") ADD_TOKEN(tokens, tok, "JUMPNOTZERO");
         if (tok == "NOP") ADD_TOKEN(tokens, tok, "NOOPERATION");
-        if (tok == "HALT") ADD_TOKEN(tokens, tok, "HALT");
+        if (tok == "STOP") ADD_TOKEN(tokens, tok, "HALT");
         if (tok == "SUB") ADD_TOKEN(tokens, tok, "SUBTRACT");
 
         // separators
@@ -101,8 +100,8 @@ std::vector<std::string> Lexer::analyse(){
         if (tok == "]") ADD_TOKEN(tokens, tok, "LEFTBRACKET");
 
         // registers
-        if (tok == "%AH") ADD_TOKEN(tokens, tok, "REGISTER_ACCHI");
-        if (tok == "%AL") ADD_TOKEN(tokens, tok, "REGISTER_ACCLOW");
+        if (tok == "%AH") ADD_TOKEN(tokens, tok, "REGISTER_5");
+        if (tok == "%AL") ADD_TOKEN(tokens, tok, "REGISTER_6");
         if (tok == "%RBX") ADD_TOKEN(tokens, tok, "REGISTER_1");
         if (tok == "%RAX") ADD_TOKEN(tokens, tok, "REGISTER_0");
         if (tok == "%RCX") ADD_TOKEN(tokens, tok, "REGISTER_2");
@@ -119,7 +118,11 @@ std::vector<std::string> Lexer::analyse(){
             }
             else if (tok.length() == 3){
                 ADD_TOKEN(tokens, tok, "IMM8:"+convertHexToInt(tok));
-            }else{
+            }
+            else if (tok.length() == 1){
+                // do nothing as this is probably the HL register.
+            }
+            else{
                 LEXER_ERROR("Illegal number type - non 16/8 bit number detected.", line);
             }
         }

@@ -48,7 +48,7 @@ int main(int argc, char** argv){
             exit(-1);
         }
 
-        std::cout << "ROM Image size: " << bytes.size() << "/" << std::dec << ROM_SIZE_LIMIT << "\nROM Origin: " << std::hex\
+        std::cout << std::dec << "ROM Image size: " << bytes.size() << "/" << ROM_SIZE_LIMIT << "\nROM Origin: " << std::hex\
          << parser.org_address << std::endl;
         char rom[ROM_SIZE_LIMIT];
         std::cout << "Creating rom image [1/2]: Creating blank image...\n";
