@@ -1,4 +1,5 @@
 #include "Lexer.h"
+#include "FileLoader.h"
 
 #include <iostream>
 #include <string>
@@ -63,9 +64,13 @@ void Lexer::loadText(std::string* text){
 std::vector<std::string> Lexer::analyse(){
     std::vector<std::string> tokens;
     std::string tok;
+    FileLoader file;
 
     int line = 0;
     int idx = 0;
+
+    bool includeStart = false;
+    std::string incFileName = "";
 
     Lexer::current_text = capitalizeString(Lexer::current_text);
 
@@ -73,6 +78,11 @@ std::vector<std::string> Lexer::analyse(){
         if (Lexer::current_text[idx] != '\n' && Lexer::current_text[idx] != ' ') tok += Lexer::current_text[idx];
         if (Lexer::current_text[idx] == '\n'){
             line++;
+            if (includeStart == true){
+                std::cout << incFileName << std::endl;
+                includeStart = false;
+                incFileName = "";
+            }
             ADD_TOKEN(tokens, tok, "NEWLINE");
         }
 
@@ -108,8 +118,23 @@ std::vector<std::string> Lexer::analyse(){
         if (tok == "%RDX") ADD_TOKEN(tokens, tok, "REGISTER_3");
         if (tok == "%RZX") ADD_TOKEN(tokens, tok, "REGISTER_4");
 
+        // include file
+        if (includeStart){
+            if (tok == "\""){
+                tok = "";
+            }else{
+                incFileName += tok;
+                tok = "";
+            }
+        }
+
         // preprocessor macros
         if (tok == "@ORG") ADD_TOKEN(tokens, tok, "PREP_ORG");
+        if (tok == "@INCLUDE"){
+            // this is a lexical operator
+            includeStart = true;
+            tok = "";
+        }
 
         // number CTRL
         if (tok[tok.length()-1] == 'H'){ // 2-way: 16-bit numbers and 8-bit numbers
