@@ -15,12 +15,15 @@ device used to teach how computers work.
 
 == INSTRUCTIONS ==
 
-00 : ADD REG, IMM16/REG -> REG = REG + IMM16/REG          [ ]
-01 : SUB REG, IMM16/REG -> REG = REG + IMM16/REG          [ ]
-02 : AND REG, IMM16/REG -> REG = REG & IMM16/REG          [ ]
-03 : OR  REG, IMM16/REG -> REG = REG | IMM16/REG          [ ]
-04 : NOR REG, IMM16/REG -> REG = ~(REG | IMM16/REG)       [ ]
-05 : CMP REG, IMM16/REG -> REG = REG - IMM16/REG          [ ]
+[ ]: Not completed
+[/]: Completed
+
+00 : ADD REG, IMM16/REG -> REG = REG + IMM16/REG          [/]
+01 : SUB REG, IMM16/REG -> REG = REG + IMM16/REG          [/]
+02 : AND REG, IMM16/REG -> REG = REG & IMM16/REG          [/]
+03 : OR  REG, IMM16/REG -> REG = REG | IMM16/REG          [/]
+04 : NOR REG, IMM16/REG -> REG = ~(REG | IMM16/REG)       [/]
+05 : CMP REG, IMM16/REG -> REG = REG - IMM16/REG          [/]
 06 : PUSH REG           -> [++SP] = REG                   [/]
 07 : POP REG            -> REG = [--SP]                   [/]
 08 : LR  REG, IMM16/REG -> REG = IMM16/REG                [/]
