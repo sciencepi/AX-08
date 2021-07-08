@@ -27,7 +27,6 @@ void APPEND_ARITHMETIC_OPERATIONS(Lexer* lexer, std::vector<std::string> tokens,
     if (token == "SUBTRACT") instruction_to_push = I_SUB;
 
     if (instruction_to_push == 0xFF) return;
-    std::cout << instruction_to_push << std::endl;
 
     try{
         if (lexer->slice(0,3,tokens[i+1]) == "REG"){

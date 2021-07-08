@@ -20,7 +20,6 @@ int main(int argc, char** argv){
     if (argc > 2){
         std::string loaded_text = fl.loadFile(new std::string(argv[1]));
         std::string output_file = std::string(argv[2]);
-        std::cout << output_file << std::endl;
         lexer.loadText(&loaded_text); // load the text into memory such that the lexer can later process it.
         std::vector<std::string> tokens = lexer.analyse();
 
