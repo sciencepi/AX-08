@@ -44,6 +44,7 @@ void APPEND_ARITHMETIC_OPERATIONS(Lexer* lexer, std::vector<std::string> tokens,
                 }
                 if (lexer->slice(0, 3, tokens[i+3]) == "REG"){
                     output.push_back(instruction_to_push + 0x10);
+                    output.push_back((stoi(lexer->slice(tokens[i+1].length()-1, tokens[i+1].length(), tokens[i+1]))));
                     output.push_back((stoi(lexer->slice(tokens[i+3].length()-1, tokens[i+3].length(), tokens[i+3]))));
                     i += 2;
                     return;

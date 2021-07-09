@@ -12,6 +12,15 @@ To compile run `ax08comp <file> <rom_output>` [IN DEVELOPMENT]
 To emulate run `ax08emu <rom>` [NOT IMPLEMENTED]
 
 ## Added:
+### version 0.3
+- Fixed the arithmetic instruction bug with the parser
+- Implemented Macros
+- Typing `@macro <macro name>` creates a macro
+- Typing `@endmacro` finishes a macro
+- "sub" instruction truly remapped to 0x01
+- Added section "MACROS" to spec.txt
+- Added instruction `@endmacro`
+- Added instruction `@macro`
 ### version 0.2
 - Finished the parser instruction listing (all instructions work now)
 - Corrected the ROM Image size bug

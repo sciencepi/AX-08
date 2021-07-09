@@ -28,6 +28,16 @@ int findMacro(std::vector<Macro> macros, std::string name){
     return -1;
 }
 
+Macro getMacro(std::vector<Macro> macros, std::string name){
+    for (int i = 0; i < macros.size(); i++){
+        if (macros[i].macro_name == name){
+            return macros[i];
+        }
+    }
+    Macro errorMacro;
+    errorMacro.macro_name = "";
+}
+
 void ADD_TOKEN(std::vector<std::string>& tokens, std::string& toks, std::string token, std::vector<Macro>& macros,\
  bool macroStart, std::string currentMacro, bool macroFinished){
     if (!macroStart){
@@ -42,7 +52,6 @@ void ADD_TOKEN(std::vector<std::string>& tokens, std::string& toks, std::string 
                 return;
             }
             macros[midx].macro_code.push_back(token);
-            std::cout << "Added macro token " << token << " to " << currentMacro << std::endl;
             toks = "";
         }
     }
@@ -103,6 +112,9 @@ std::vector<std::string> Lexer::analyse(){
     bool macroStart = false;
     bool macroFinished = true;
 
+    bool macroExpressionStart = false;
+    std::string macroExpression = "";
+
     std::string current_MacroName = "";
     Macro currentMacro;
 
@@ -127,12 +139,26 @@ std::vector<std::string> Lexer::analyse(){
 
             if (macroStart){
                 currentMacro.macro_name = current_MacroName;
+                if (!macroFinished)
+                    macros.push_back(currentMacro);
                 macroFinished = true;
-                macros.push_back(currentMacro);
+            }
+            if (macroExpressionStart){
+                macroExpressionStart = false;
+                Macro mac = getMacro(macros, macroExpression);
+                if (mac.macro_name == ""){
+                    LEXER_ERROR("Cannot find macro \"" + macroExpression + "\"", line);
+                    exit(-1);
+                }
+                // paste in the macro
+                for (std::string macroE : mac.macro_code){
+                    tokens.push_back(macroE);
+                }
+                macroExpression = "";
             }
             ADD_TOKEN(tokens, tok, "NEWLINE", macros, macroStart, current_MacroName, macroFinished);
         }
-        if (tok == "@endmacro"){
+        if (tok == "@ENDMACRO"){
             macroStart = false;
             macroFinished = true;
             tok = "";
@@ -186,6 +212,14 @@ std::vector<std::string> Lexer::analyse(){
         if (tok == "@INCLUDE"){
             // this is a lexical operator
             includeStart = true;
+            tok = "";
+        }
+        if (macroExpressionStart){
+            macroExpression += tok;
+            tok = "";
+        }
+        if (tok == "."){
+            macroExpressionStart = true;
             tok = "";
         }
         if (macroStart && !macroFinished){

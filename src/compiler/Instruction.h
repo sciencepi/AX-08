@@ -2,7 +2,7 @@
 #define INSTRUCTION_L
 
 #define I_ADD  0x00
-#define I_SUB  0xF0
+#define I_SUB  0x01
 #define I_AND  0x02
 #define I_OR   0x03
 #define I_NOR  0x04

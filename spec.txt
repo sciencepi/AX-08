@@ -34,3 +34,27 @@ device used to teach how computers work.
 0D : JNZ                -> Z != 0 ? PC = HL : NOP         [/]
 0E : NOP                -> [++PC]                         [/]
 0F : STOP               -> [PC = PC]**                    [/]
+
+== MACROS ==
+A macro is a little snippet of code stored with a variable name (V).
+if the programmer wishes to re-use that snippet of code over and over
+again within their program, all they must type is ".V". This signifies
+to the compiler that a macro of name "V" should be pasted into the
+output feed. This can be used to make very elegant looking code
+easily.
+
+To start a macro, simply type "@macro <macro_name>" into your program,
+and you then must type the macro code beneath it. To end a macro
+statement, type "@endmacro" - signifying to the compiler that the macro
+has been completed.
+
+CODE EXAMPLE:
+    @macro test_macro
+        ldh 80h
+        ldl 20h
+    @endmacro
+
+    .test_macro
+
+This code creates the macro "test_macro" and then lists 2 instructions
+that then get pasted in on the line ".test_macro".
